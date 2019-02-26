@@ -34,11 +34,35 @@ app.startQuestion = (closeConnectionCallback) => {
   })
 }
 
-app.completeSentence = (continueCallback) => {
-  //YOUR WORK HERE
-  console.log('Please write code for this function');
-  //End of your work
-  continueCallback();
+app.completeSentence = () => {
+  const questions = [
+    { type: 'confirm',
+      name: 'confirm',
+      message: '===== Welcome to the Crystal Ball ======\n I can tell you about your past and your future...',
+      default: true
+    },
+    {
+      type: 'input',
+      name: 'string1',
+      message: 'What is your first word of choice?'
+    },
+    {
+      type: 'input',
+      name: 'string2',
+      message: 'What is your second word of choice?'
+    }
+  ];
+
+  inquirer.prompt(questions)
+  .then(function(answers) {
+    // if(answers.confirm) {
+    //   console.log('Your quest will start now...');
+    // } else {
+    //   console.log(`Sorry to hear that...Come back when you want to find out about yourself.`);
+    // }
+    console.log(`In your previous life, you're a ${answers.string1}. In your next life you will be a ${answers.string2}`);
+  });
+  // continueCallback();
 }
 
 app.createNewUser = (continueCallback) => {
@@ -81,5 +105,7 @@ app.seeUsersOfOneEvent = (continueCallback) => {
   //End of your work
   continueCallback();
 }
+
+app.startQuestion();
 
 module.exports = app;

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const connection = require('./connection');
 const app = require('./app');
 
