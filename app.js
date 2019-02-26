@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 //connection available to all
 const connection = require('./connection');
+const eventful = require('./eventfulAPI');
 
 const app = {};
 
@@ -74,12 +75,33 @@ app.createNewUser = (continueCallback) => {
 
 }
 
-app.searchEventful = (continueCallback) => {
-  //YOUR WORK HERE
+app.searchEventful = () => {
+  const questions = [
+    { type: 'input',
+      name: 'keyword',
+      message: 'What kind of events are you looking for?'
+    },
+    {
+      type: 'input',
+      name: 'location',
+      message: 'In which city?'
+    },
+    {
+      type: 'input',
+      name: 'date',
+      message: 'When do you want to go to events?'
+    }
+  ];
 
-  console.log('Please write code for this function');
-  //End of your work
-  continueCallback();
+  inquirer.prompt(questions)
+  .then(answers => {
+    eventful.search({
+      keywords: answers.keyword,
+      location: answers.location,
+      date: answers.date
+    });
+  });
+  
 }
 
 app.matchUserWithEvent = (continueCallback) => {
