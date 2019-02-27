@@ -50,7 +50,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/events', (req, res) => {
-  res.status(200).json(events);
+  if(events) {
+    res.status(200).json(events);
+  } else {
+    res.status(404).json({message: 'There are no events yet...'});
+  }
 });
 
 app.get('/events/:id', (req, res) => {
@@ -58,8 +62,9 @@ app.get('/events/:id', (req, res) => {
   events.forEach(event => {
     if(event.id === id) {
       res.status(200).json(event);
-    }
+    } 
   });
+  res.status(404).json({message: 'Event Not Found...'});
 });
 
 app.post('/events', (req, res) => {
@@ -70,8 +75,13 @@ app.post('/events', (req, res) => {
     venue_name: req.body.venue_name,
     venue_address: req.body.venue_address
   }
-  events.push(newEvent);
-  res.status(201).json(newEvent);
+
+  if(newEvent.id && newEvent.title && newEvent.start_time && newEvent.venue_name && newEvent.venue_address) {
+    events.push(newEvent);
+    res.status(201).json(newEvent);
+  } else {
+    res.status(400).json({message: 'Please enter all 5 inputs: id, title, start_time, venue_name, venue_address'});
+  }
 });
 
 app.put('/events/:id', (req, res) => {
@@ -83,15 +93,23 @@ app.put('/events/:id', (req, res) => {
       event.venue_name = req.body.venue_name;
       event.venue_address = req.body.venue_address;
       res.status(204).end();
-    }
+    } 
   });
+  res.status(404).json({message: 'Event Not Found...'});
 });
 
 app.delete('/events/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = events.findIndex(event => event.id === id);
-  events.slice(index, 1);
-  res.status(204).end();
+  console.log(events.length);
+  console.log(index);
+  if(index >= 0) {
+    events.splice(index, 1);
+    console.log(events.length);
+    res.status(204).end();
+  } else {
+    res.status(404).json({message: 'Event Not Found...'});
+  }
 });
 
 app.listen(PORT, () => {
