@@ -155,6 +155,21 @@ app.updateAnEventById = () => {
   });
 }
 
+app.deleteAnEventById = () => {
+  inquirer.prompt({
+    type: 'input',
+    name: 'id',
+    message: 'Which event do you want to delete? Please enter event ID.'
+  }).then(answers => {
+    const id = parseInt(answers.id);
+    fetch(`http://localhost:3000/events/${id}`, {
+      method: 'delete'
+    })
+    .then(res => res.json())
+    .then(json => console.log(json));
+  });
+}
+
 app.completeSentence = () => {
   const questions = [
     { type: 'confirm',
