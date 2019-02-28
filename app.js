@@ -52,6 +52,18 @@ app.findAllEvents = () => {
   .then(json => console.log(json));
 }
 
+app.findEventById = () => {
+  inquirer.prompt({
+    type: 'input',
+    name: 'id',
+    message: 'Which event are you looking for? Please enter event ID.'
+  }).then(answers => {
+    const id = parseInt(answers.id);
+    fetch(`http://localhost:3000/events/${id}`)
+    .then(res => res.json())
+    .then(json => console.log(json));
+  });
+}
 
 
 app.completeSentence = () => {
