@@ -19,7 +19,8 @@ app.get('/', (req, res) => {
 app.get('/events', (req, res) => {
   pool.query('SELECT * FROM events', (err, results) => {
     if(err) {
-      res.status(404).json({message: 'There are no events yet...'});
+      // this would return even if your db is not connected
+      res.status(404).json({message: 'oops...looks like you are not connected to the database'});
     } else {
       res.status(200).json(results.rows);
     }
@@ -34,7 +35,7 @@ app.get('/events/:id', (req, res) => {
     if(err) {
       res.status(404).json({message: 'Event Not Found...'});
     } else {
-      res.status(200).json(results.rows);
+      res.status(200).json(results.rows[0]);
     }
   });
 });
@@ -43,12 +44,12 @@ app.get('/events/:id', (req, res) => {
 app.post('/events', (req, res) => {
   const { title, start_time, venue_name, venue_address } = req.body;
 
-  pool.query('INSERT INTO events (title, start_time, venue_name, venue_address) VALUES ($1, $2, $3, $4)', [title, start_time, venue_name, venue_address],
+  pool.query('INSERT INTO events (title, start_time, venue_name, venue_address) VALUES ($1, $2, $3, $4) RETURNING *', [title, start_time, venue_name, venue_address],
   (err, results) => {
     if(err) {
       res.status(400).json({message: 'Please enter all 5 inputs: id, title, start_time, venue_name, venue_address'});
     } else {
-      res.status(201).json({message: 'Your event is successfully created'});
+      res.status(201).json(results.rows[0]);
     }
   });
 });
@@ -58,11 +59,11 @@ app.put('/events/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const { title, start_time, venue_name, venue_address } = req.body;
 
-  pool.query('UPDATE events SET title = $1, start_time = $2, venue_name = $3, venue_address = $4 WHERE id = $5', [title, start_time, venue_name, venue_address, id], (err, results) => {
+  pool.query('UPDATE events SET title = $1, start_time = $2, venue_name = $3, venue_address = $4 WHERE id = $5 RETURNING *', [title, start_time, venue_name, venue_address, id], (err, results) => {
     if(err) {
-      res.status(404).json({message: 'Event Not Found...'});
+      res.status(404).json({message: 'Error...Please try again...'});
     } else {
-      res.status(204).json({message: 'Your Event has been successfully updated'});
+      res.status(200).json(results.rows[0]);
     }
   });
 });
@@ -71,11 +72,11 @@ app.put('/events/:id', (req, res) => {
 app.delete('/events/:id', (req, res) => {
   const id = parseInt(req.params.id);
 
-  pool.query('DELETE FROM events WHERE id = $1', [id], (err, results) => {
+  pool.query('DELETE FROM events WHERE id = $1 RETURNING *', [id], (err, results) => {
     if(err) {
       res.status(404).json({message: 'Event Not Found...'});
     } else {
-      res.status(204).json({message: 'Your Event has been successfully deleted'});
+      res.status(200).json(results.rows[0]);
     }
   });
 });
