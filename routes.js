@@ -62,7 +62,7 @@ app.put('/events/:id', (req, res) => {
     if(err) {
       res.status(404).json({message: 'Event Not Found...'});
     } else {
-      res.status(204).end();
+      res.status(204).json({message: 'Your Event has been successfully updated'});
     }
   });
 });
@@ -75,7 +75,7 @@ app.delete('/events/:id', (req, res) => {
     if(err) {
       res.status(404).json({message: 'Event Not Found...'});
     } else {
-      res.status(204).end();
+      res.status(204).json({message: 'Your Event has been successfully deleted'});
     }
   });
 });
