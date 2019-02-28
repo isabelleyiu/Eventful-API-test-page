@@ -49,7 +49,8 @@ app.startQuestion = (closeConnectionCallback) => {
 app.findAllEvents = () => {
   fetch('http://localhost:3000/events')
   .then(res => res.json())
-  .then(json => console.log(json));
+  .then(json => console.log(json))
+  .catch(err => console.error(err));
   // continueCallback();
 }
 
@@ -59,10 +60,10 @@ app.findEventById = () => {
     name: 'id',
     message: 'Which event are you looking for? Please enter event ID.'
   }).then(answers => {
-    const id = parseInt(answers.id);
     fetch(`http://localhost:3000/events/${id}`)
     .then(res => res.json())
-    .then(json => console.log(json));
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
   });
   // continueCallback();
 }
@@ -105,7 +106,8 @@ app.createAnEvent = () => {
       headers: {'Content-Type': 'application/json'},
     })
     .then(res => res.json())
-    .then(json => console.log(json));
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
   });
 }
 
@@ -143,15 +145,16 @@ app.updateAnEventById = () => {
         venue_name: answers.venue_name,
         venue_address: answers.venue_address
       }
-    
-    const id = parseInt(answers.id);
-    fetch(`http://localhost:3000/events/${id}`, {
+    fetch(`http://localhost:3000/events/${answers.id}`, {
       method: 'put',
       body: JSON.stringify(body),
       headers: {'Content-Type': 'application/json'},
     })
-    .then(res => res.json())
-    .then(json => console.log(json));
+    .then(res => {
+      return res.json();
+    })
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
   });
 }
 
@@ -166,7 +169,8 @@ app.deleteAnEventById = () => {
       method: 'delete'
     })
     .then(res => res.json())
-    .then(json => console.log(json));
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
   });
 }
 
@@ -236,7 +240,7 @@ app.searchEventful = () => {
       keywords: answers.keyword,
       location: answers.location,
       date: answers.date
-    });
+    }).catch(err => console.error(err));
   });
   
 }
