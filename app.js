@@ -50,6 +50,7 @@ app.findAllEvents = () => {
   fetch('http://localhost:3000/events')
   .then(res => res.json())
   .then(json => console.log(json));
+  // continueCallback();
 }
 
 app.findEventById = () => {
@@ -63,8 +64,96 @@ app.findEventById = () => {
     .then(res => res.json())
     .then(json => console.log(json));
   });
+  // continueCallback();
 }
 
+app.createAnEvent = () => {
+  const questions = [
+    { type: 'input',
+      name: 'title',
+      message: 'What is the title of your event?'
+    },
+    {
+      type: 'input',
+      name: 'start_time',
+      message: 'What day and time does it start? Please enter in this format "2019-01-09T08:00:00.000Z"'
+    },
+    {
+      type: 'input',
+      name: 'venue_name',
+      message: 'When is the name of the venue?'
+    },
+    {
+      type: 'input',
+      name: 'venue_address',
+      message: 'What is the address of your venue?'
+    }
+  ];
+
+  inquirer.prompt(questions)
+  .then(answers => {
+    const body = {
+      title: answers.title,
+      start_time: answers.start_time,
+      venue_name: answers.venue_name,
+      venue_address: answers.venue_address
+    }
+
+    fetch('http://localhost:3000/events', {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: {'Content-Type': 'application/json'},
+    })
+    .then(res => res.json())
+    .then(json => console.log(json));
+  });
+}
+
+app.updateAnEventById = () => {
+  const questions = [
+    { type: 'input',
+      name: 'id',
+      message: 'Which event do you want to update? Please enter the event ID.'
+    },
+    { type: 'input',
+      name: 'title',
+      message: 'What is the new title of your event?'
+    },
+    {
+      type: 'input',
+      name: 'start_time',
+      message: 'What is the new day and start time? Please enter in this format "2019-01-09T08:00:00.000Z"'
+    },
+    {
+      type: 'input',
+      name: 'venue_name',
+      message: 'What is the new name of the venue?'
+    },
+    {
+      type: 'input',
+      name: 'venue_address',
+      message: 'What is the new address of your venue?'
+    }];
+
+    inquirer.prompt(questions)
+    .then(answers => {
+      const body = {
+        title: answers.title,
+        start_time: answers.start_time,
+        venue_name: answers.venue_name,
+        venue_address: answers.venue_address
+      }
+    
+    const id = parseInt(answers.id);
+    fetch(`http://localhost:3000/events/${id}`, {
+      method: 'put',
+      body: JSON.stringify(body),
+      headers: {'Content-Type': 'application/json'},
+    })
+    .then(res => res.json())
+    .then(json => console.log(json));
+  });
+}
 
 app.completeSentence = () => {
   const questions = [
@@ -105,6 +194,8 @@ app.createNewUser = (continueCallback) => {
   continueCallback();
 
 }
+
+
 
 app.searchEventful = () => {
   const questions = [
