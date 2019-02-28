@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const pool = require('./connection');
 
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // landing 
