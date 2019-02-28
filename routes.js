@@ -3,24 +3,18 @@ const PORT = process.env.PORT || 3000;
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB,
-  password: process.env.PASSWORD,
-  port: 5432
-});
+const pool = require('./connection');
 
 app.use(bodyParser.json());
 
+// landing 
 app.get('/', (req, res) => {
   res.json({
     message: 'Welcome to Eventonica!'
   });
 });
 
+// display all events
 app.get('/events', (req, res) => {
   pool.query('SELECT * FROM events', (err, results) => {
     if(err) {
@@ -31,6 +25,7 @@ app.get('/events', (req, res) => {
   });
 });
 
+// display a particular event by Id
 app.get('/events/:id', (req, res) => {
   const id = parseInt(req.params.id);
   
@@ -43,6 +38,7 @@ app.get('/events/:id', (req, res) => {
   });
 });
 
+// create an event
 app.post('/events', (req, res) => {
   const { title, start_time, venue_name, venue_address } = req.body;
 
@@ -56,6 +52,7 @@ app.post('/events', (req, res) => {
   });
 });
 
+// Update an event by Id
 app.put('/events/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const { title, start_time, venue_name, venue_address } = req.body;
@@ -69,6 +66,7 @@ app.put('/events/:id', (req, res) => {
   });
 });
 
+// delete an event
 app.delete('/events/:id', (req, res) => {
   const id = parseInt(req.params.id);
 
