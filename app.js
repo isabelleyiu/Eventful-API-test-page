@@ -13,10 +13,10 @@ app.startQuestion = (closeConnectionCallback) => {
     choices: [
       'Complete a sentence',
       // 'Create a new user',
-      'Find one event of a particular type in San Francisco next week',
-      'See all events',
+      'Find an event through Eventful',
+      'See all events in our database',
       'Find an event by Id',
-      'Create an event',
+      'Create an event ',
       'Update an event',
       'Delete an event',
       // 'Mark an existing user to attend an event in database',
@@ -30,7 +30,7 @@ app.startQuestion = (closeConnectionCallback) => {
 
     if (res.action === 'Complete a sentence') app.completeSentence(continueCallback);
     // if (res.action === 'Create a new user') app.createNewUser(continueCallback);
-    if (res.action === 'Find one event of a particular type in San Francisco next week') app.searchEventful(continueCallback);
+    if (res.action === 'Find an event through Eventful') app.searchEventful(continueCallback);
     if (res.action === 'See all events') app.findAllEvents(continueCallback);
     if (res.action === 'Find an event by Id') app.findEventById(continueCallback);
     if (res.action === 'Create an event') app.createAnEvent(continueCallback);
@@ -229,7 +229,7 @@ app.searchEventful = () => {
     {
       type: 'input',
       name: 'date',
-      message: 'When do you want to go to events?'
+      message: 'When? Search by Month or enter "Today", "Last Week", "This Week", "Next week"'
     }
   ];
 
@@ -238,7 +238,9 @@ app.searchEventful = () => {
     eventful.search({
       keywords: answers.keyword,
       location: answers.location,
-      date: answers.date
+      date: answers.date,
+      sort_order: 'date',
+      sort_direction: 'descending'
     });
   }).catch(err => console.error(err));
   
