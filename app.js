@@ -51,7 +51,6 @@ app.findAllEvents = () => {
   .then(res => res.json())
   .then(json => console.log(json))
   .catch(err => console.error(err));
-  // continueCallback();
 }
 
 app.findEventById = () => {
@@ -64,8 +63,7 @@ app.findEventById = () => {
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error(err));
-  });
-  // continueCallback();
+  }).catch(err => console.error(err));
 }
 
 app.createAnEvent = () => {
@@ -108,7 +106,7 @@ app.createAnEvent = () => {
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error(err));
-  });
+  }).catch(err => console.error(err));
 }
 
 app.updateAnEventById = () => {
@@ -145,17 +143,17 @@ app.updateAnEventById = () => {
         venue_name: answers.venue_name,
         venue_address: answers.venue_address
       }
-    fetch(`http://localhost:3000/events/${answers.id}`, {
+
+      fetch(`http://localhost:3000/events/${answers.id}`, {
       method: 'put',
       body: JSON.stringify(body),
       headers: {'Content-Type': 'application/json'},
-    })
-    .then(res => {
-      return res.json();
-    })
-    .then(json => console.log(json))
-    .catch(err => console.error(err));
-  });
+      })
+      .then(res => res.json())
+      .then(json => console.log(json))
+      .catch(err => console.error(err));
+
+    }).catch(err => console.error(err));
 }
 
 app.deleteAnEventById = () => {
@@ -171,7 +169,8 @@ app.deleteAnEventById = () => {
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error(err));
-  });
+
+  }).catch(err => console.error(err));
 }
 
 app.completeSentence = () => {
@@ -240,8 +239,8 @@ app.searchEventful = () => {
       keywords: answers.keyword,
       location: answers.location,
       date: answers.date
-    }).catch(err => console.error(err));
-  });
+    });
+  }).catch(err => console.error(err));
   
 }
 
